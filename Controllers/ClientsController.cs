@@ -1,8 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MyCRM_API.Db;
 using MyCRM_API.Models;
+using MyCRM_API.Models.DTO.Clients;
+using MyCRM_API.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,50 +18,115 @@ namespace MyCRM_API.Controllers
     [Route("api/[controller]")]
     public class ClientsController : ControllerBase
     {
-        private readonly AppContext appContext;
-        public ClientsController(AppContext appContext)
+        private readonly DataContext dataContext;
+        private readonly IMapper mapper;
+        private readonly IDateTimeProvider dateTimeProvider;
+
+        public ClientsController(DataContext dataContext, IMapper mapper, IDateTimeProvider dateTimeProvider)
         {
-            this.appContext = appContext;
+            this.dataContext = dataContext;
+            this.mapper = mapper;
+            this.dateTimeProvider = dateTimeProvider;
         }
 
-        [HttpGet(Name = "GetAllClients")]
-        public IEnumerable<Client> Getall()
+        [HttpGet]
+        public async Task<ActionResult<PageInfo<ClientAllResponse>>> GetAll([FromQuery] int page)
         {
-            return appContext.Clients.ToList();
+            int pageSize = 5;
+
+            IQueryable<ClientEntity> source = dataContext.Clients;
+            var totalPages = PageInfo<Object>.PagesCount(source, pageSize);
+
+            if (page < 1 || page > totalPages)
+            {
+                return NotFound(new { totalPages = totalPages, currentPage = page });
+            }
+            
+            var entities = await source.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+            var clients = mapper.Map<List<ClientAllResponse>>(entities);
+
+            var pageResponse = new PageInfo<ClientAllResponse>(totalPages, page, clients);
+
+            return Ok(pageResponse);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ClientResponse>> Get(int id)
+        {
+            var entity = await dataContext.Clients.FindAsync(id);
+
+            if (entity == null)
+            {
+                return NotFound(new { id = id });
+            }
+
+            var client = new ClientResponse();
+            mapper.Map(entity, client);
+
+            return Ok(client);
+        }
+
+        [HttpGet("{id}/profile")]
+        public async Task<ActionResult<ClientProfileResponse>> GetProfile(int id)
+        {
+            var entity = await dataContext.Clients.FindAsync(id);
+
+            if (entity == null) {
+                return NotFound(new { id = id });
+            }
+
+            var client = new ClientProfileResponse();
+            mapper.Map(entity, client);
+
+            client.OrdersQuantity = await dataContext.Orders.Where(o => o.ClientId == id).CountAsync();
+            client.PaymentsTotal = await dataContext.Payments.Where(p => p.ClientId == id).SumAsync(p => p.Amount);
+
+            return Ok(client);
         }
 
         [HttpPost]
-        public void Create()
+        public async Task<ActionResult<ClientEntity>> Create([FromBody] ClientRequest client)
         {
-            var client1 = new Client();
-            client1.Date = DateTime.UtcNow;
-            client1.Name = "Stanislav";
-            client1.Phone = "063 777 55 33";
-            client1.Email = "st@mail.com";
+            if (!ModelState.IsValid) {
+                return BadRequest(client);
+            }
 
-            var client2 = new Client();
-            client2.Date = DateTime.UtcNow;
-            client2.Name = "Tatiana";
-            client2.Phone = "063 555 33 11";
-            client2.Email = "tat@mail.com";
+            var newClientEntity = new ClientEntity();
+            mapper.Map(client, newClientEntity);
+            newClientEntity.Date = dateTimeProvider.UtcNow;
 
-            var client3 = new Client();
-            client3.Date = DateTime.UtcNow;
-            client3.Name = "Maria";
-            client3.Phone = "063 999 77 55";
-            client3.Email = "maria@mail.com";
+            await dataContext.Clients.AddAsync(newClientEntity);
+            await dataContext.SaveChangesAsync();
 
-            appContext.Add(client1);
-            appContext.Add(client2);
-            appContext.Add(client3);
-            appContext.SaveChanges();
+            return Ok(newClientEntity);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<ClientEntity>> Edit([FromBody] ClientEditRequest client)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest(client);
+            }
+
+            var entity = await dataContext.Clients.FindAsync(client.Id);
+
+            if (entity == null) {
+                return NotFound(new { id = client.Id });
+            }
+
+            mapper.Map(client, entity);
+            dataContext.SaveChanges();
+
+            return Ok(entity);
         }
 
         [HttpDelete("{id}")]
-        public void Delete([FromRoute]int id)
+        public async Task<ActionResult> Delete([FromRoute] int id)
         {
-            appContext.Remove(new Client() { Id = id });
-            appContext.SaveChanges();
+            dataContext.Remove(new ClientEntity() { Id = id });
+            await dataContext.SaveChangesAsync();
+
+            return Ok(id);
         }
     }
 }
