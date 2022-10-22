@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace MyCRM_API.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ExchangeRatesController : ControllerBase

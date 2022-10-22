@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MyCRM_API.Models.DTO.Clients;
 using MyCRM_API.Models.DTO.ExchangeRates;
+using MyCRM_API.Models.DTO.Manufacturers;
 using MyCRM_API.Models.Entities;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ namespace MyCRM_API
             CreateMap<ExchangeRateRequest, ExchangeRateEntity>();
             CreateMap<ExchangeRateEntity, ExchangeRateResponse>();
             CreateMap<ExchangeRateEditRequest, ExchangeRateEntity>();
+            CreateMap<ManufacturerEntity, ManufacturerResponse>().ReverseMap();
+            CreateMap<ManufacturerRequest, ManufacturerEntity>();
         }
     }
 }
