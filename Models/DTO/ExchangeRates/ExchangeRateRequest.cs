@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MyCRM_API.Models.DTO.ExchangeRates
+{
+    public class ExchangeRateRequest
+    {
+        public int CurrencyId { get; set; }
+        public float Value { get; set; }
+    }
+}

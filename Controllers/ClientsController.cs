@@ -117,7 +117,7 @@ namespace MyCRM_API.Controllers
             }
 
             mapper.Map(client, entity);
-            dataContext.SaveChanges();
+            await dataContext.SaveChangesAsync();
 
             return Ok(entity);
         }
