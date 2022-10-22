@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyCRM_API.Db;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace MyCRM_API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ClientsController : ControllerBase
@@ -39,7 +41,7 @@ namespace MyCRM_API.Controllers
 
             if (page < 1 || page > totalPages)
             {
-                return NotFound(new { totalPages = totalPages, currentPage = page });
+                return NotFound(new { Message = $"Page {page} does not exist! Total pages: {totalPages}" });
             }
             
             var entities = await source.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
