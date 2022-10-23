@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace MyCRM_API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ClientsController : ControllerBase
@@ -50,6 +50,15 @@ namespace MyCRM_API.Controllers
             var pageResponse = new PageInfo<ClientAllResponse>(totalPages, page, clients);
 
             return Ok(pageResponse);
+        }
+
+        [HttpGet("list")]
+        public async Task<ActionResult<IEnumerable<ClientAllResponse>>> GetAllList()
+        {
+            var entities = await dataContext.Clients.ToListAsync();
+            var clients = mapper.Map<IEnumerable<ClientAllResponse>>(entities);
+
+            return Ok(clients);
         }
 
         [HttpGet("{id}")]
