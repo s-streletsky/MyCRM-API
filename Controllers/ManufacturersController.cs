@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyCRM_API.Db;
 using MyCRM_API.Models;
+using MyCRM_API.Models.DTO.Clients;
 using MyCRM_API.Models.DTO.ExchangeRates;
 using MyCRM_API.Models.DTO.Manufacturers;
 using MyCRM_API.Models.Entities;
@@ -48,6 +49,15 @@ namespace MyCRM_API.Controllers
             var pageResponse = new PageInfo<ManufacturerResponse>(totalPages, page, manufacturers);
 
             return Ok(pageResponse);
+        }
+
+        [HttpGet("list")]
+        public async Task<ActionResult<IEnumerable<ManufacturerResponse>>> GetAllList()
+        {
+            var entities = await dataContext.Manufacturers.ToListAsync();
+            var manufacturers = mapper.Map<IEnumerable<ManufacturerResponse>>(entities);
+
+            return Ok(manufacturers);
         }
 
         [HttpGet("{id}")]

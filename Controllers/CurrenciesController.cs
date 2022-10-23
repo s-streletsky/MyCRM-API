@@ -15,21 +15,21 @@ namespace MyCRM_API.Controllers
     //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class OrderStatusesController : ControllerBase
+    public class CurrenciesController : ControllerBase
     {
         private readonly DataContext dataContext;
         private readonly IMapper mapper;
 
-        public OrderStatusesController(DataContext dataContext, IMapper mapper)
+        public CurrenciesController(DataContext dataContext, IMapper mapper)
         {
             this.dataContext = dataContext;
             this.mapper = mapper;
         }
 
         [HttpGet("list")]
-        public async Task<ActionResult<IEnumerable<ClientAllResponse>>> GetAllList()
+        public async Task<ActionResult<IEnumerable<CurrencyEntity>>> GetAllList()
         {
-            var entities = await dataContext.OrderStatuses.ToListAsync();
+            var entities = await dataContext.Currencies.ToListAsync();
 
             return Ok(entities);
         }
