@@ -65,7 +65,7 @@ namespace MyCRM_API.Controllers
             mapper.Map(entity, order);
 
             order.Items = await dataContext.OrdersItems.Where(i => i.OrderId == id).ToListAsync();
-            order.Total = await dataContext.OrdersItems.Where(i => i.OrderId == id).SumAsync(i => i.Total);
+            order.Total = (float)await dataContext.OrdersItems.Where(i => i.OrderId == id).SumAsync(i => i.Total);
             order.PaymentsTotal = await dataContext.Payments.Where(p => p.OrderId == id).SumAsync(p => p.Amount);
             order.Debt = order.Total - order.PaymentsTotal;
 

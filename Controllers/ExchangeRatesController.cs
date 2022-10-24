@@ -67,6 +67,17 @@ namespace MyCRM_API.Controllers
             return Ok(exchangeRate);
         }
 
+        [HttpGet("current/{id}")]
+        public async Task<ActionResult<ExchangeRateEntity>> GetCurrent(int id)
+        {
+            var currentExchangeRate = await dataContext.ExchangeRates
+                    .Where(e => e.CurrencyId == id)
+                    .OrderByDescending(e => e.Id)
+                    .FirstOrDefaultAsync();
+
+            return Ok(currentExchangeRate);
+        }
+
         [HttpPost]
         public async Task<ActionResult<ExchangeRateEntity>> Create([FromBody] ExchangeRateRequest exchangeRate)
         {

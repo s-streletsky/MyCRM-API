@@ -16,7 +16,7 @@ namespace MyCRM_API.Models.Entities
         public float Quantity { get; set; }
         public float? Price { get; set; }
         public float? Discount { get; set; }
-        public float Total { get; set; }
+        public float? Total { get; set; }
         public float? Profit { get; set; }
         public float? Expenses { get; set; }
         public float? ExchangeRate { get; set; }
