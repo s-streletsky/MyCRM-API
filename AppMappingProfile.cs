@@ -3,6 +3,7 @@ using MyCRM_API.Models.DTO.Clients;
 using MyCRM_API.Models.DTO.ExchangeRates;
 using MyCRM_API.Models.DTO.Manufacturers;
 using MyCRM_API.Models.DTO.Orders;
+using MyCRM_API.Models.DTO.StockArrivals;
 using MyCRM_API.Models.DTO.StockItems;
 using MyCRM_API.Models.Entities;
 using System;
@@ -35,6 +36,9 @@ namespace MyCRM_API
             CreateMap<StockItemEntity, StockItemAllResponse>();
             CreateMap<StockItemRequest, StockItemEntity>();
             CreateMap<StockItemEntity, StockItemResponse>().ReverseMap();
+            CreateMap<StockArrivalEntity, StockArrivalAllResponse>();
+            CreateMap<StockArrivalRequest, StockArrivalEntity>();
+            CreateMap<StockArrivalEntity, StockArrivalResponse>().ReverseMap();
         }
     }
 }

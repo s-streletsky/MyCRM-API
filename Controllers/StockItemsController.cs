@@ -49,6 +49,14 @@ namespace MyCRM_API.Controllers
             return Ok(pageResponse);
         }
 
+        [HttpGet("list")]
+        public async Task<ActionResult<IEnumerable<ManufacturerResponse>>> GetAllList()
+        {
+            var entities = await dataContext.StockItems.ToListAsync();
+
+            return Ok(entities);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<StockItemResponse>> Get(int id)
         {
