@@ -39,6 +39,7 @@ namespace MyCRM_API
             CreateMap<StockArrivalEntity, AllStockArrivalsDto>();
             CreateMap<StockArrivalCreateDto, StockArrivalEntity>();
             CreateMap<StockArrivalEntity, StockArrivalEditDto>().ReverseMap();
+            CreateMap<OrderItemEntity, AllOrderItemsDto>();
             CreateMap<OrderItemCreateDto, OrderItemEntity>();
             CreateMap<OrderItemEntity, OrderItemEditDto>().ReverseMap();
             CreateMap<PaymentEntity, AllPaymentsDto>();

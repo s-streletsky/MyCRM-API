@@ -7,6 +7,7 @@ using MyCRM_API.Models;
 using MyCRM_API.Models.DTO.Manufacturers;
 using MyCRM_API.Models.DTO.StockItems;
 using MyCRM_API.Models.Entities;
+using MyCRM_API.Processors;
 
 namespace MyCRM_API.Controllers
 {
@@ -38,6 +39,9 @@ namespace MyCRM_API.Controllers
 
             var entities = await source.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
             var stockItems = mapper.Map<List<AllStockItemsDto>>(entities);
+
+            var quantityProcessor = new StockItemsQuantityProcessor(dataContext);
+            quantityProcessor.GetQuantity(stockItems);
 
             var pageResponse = new PageInfo<AllStockItemsDto>(totalPages, page, stockItems);
 
