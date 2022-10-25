@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyCRM_API.Models.DTO.StockItems
 {
-    public class StockItemRequest
+    public class StockItemCreateDto
     {
         public string Name { get; set; }
         public int? ManufacturerId { get; set; }

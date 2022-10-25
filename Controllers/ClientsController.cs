@@ -26,7 +26,7 @@ namespace MyCRM_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PageInfo<ClientAllResponse>>> GetAll([FromQuery] int page)
+        public async Task<ActionResult<PageInfo<AllClientsDto>>> GetAll([FromQuery] int page)
         {
             int pageSize = 5;
 
@@ -39,24 +39,24 @@ namespace MyCRM_API.Controllers
             }
             
             var entities = await source.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
-            var clients = mapper.Map<List<ClientAllResponse>>(entities);
+            var clients = mapper.Map<List<AllClientsDto>>(entities);
 
-            var pageResponse = new PageInfo<ClientAllResponse>(totalPages, page, clients);
+            var pageResponse = new PageInfo<AllClientsDto>(totalPages, page, clients);
 
             return Ok(pageResponse);
         }
 
         [HttpGet("list")]
-        public async Task<ActionResult<IEnumerable<ClientAllResponse>>> GetAllList()
+        public async Task<ActionResult<IEnumerable<AllClientsDto>>> GetAllList()
         {
             var entities = await dataContext.Clients.ToListAsync();
-            var clients = mapper.Map<IEnumerable<ClientAllResponse>>(entities);
+            var clients = mapper.Map<IEnumerable<AllClientsDto>>(entities);
 
             return Ok(clients);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ClientResponse>> Get(int id)
+        public async Task<ActionResult<ClientEditDto>> Get(int id)
         {
             var entity = await dataContext.Clients.FindAsync(id);
 
@@ -65,14 +65,14 @@ namespace MyCRM_API.Controllers
                 return NotFound(new { id = id });
             }
 
-            var client = new ClientResponse();
+            var client = new ClientEditDto();
             mapper.Map(entity, client);
 
             return Ok(client);
         }
 
         [HttpGet("{id}/profile")]
-        public async Task<ActionResult<ClientProfileResponse>> GetProfile(int id)
+        public async Task<ActionResult<ClientProfileDto>> GetProfile(int id)
         {
             var entity = await dataContext.Clients.FindAsync(id);
 
@@ -80,7 +80,7 @@ namespace MyCRM_API.Controllers
                 return NotFound(new { id = id });
             }
 
-            var client = new ClientProfileResponse();
+            var client = new ClientProfileDto();
             mapper.Map(entity, client);
 
             client.OrdersQuantity = await dataContext.Orders.Where(o => o.ClientId == id).CountAsync();
@@ -90,7 +90,7 @@ namespace MyCRM_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ClientEntity>> Create([FromBody] ClientRequest client)
+        public async Task<ActionResult<ClientEntity>> Create([FromBody] ClientCreateDto client)
         {
             if (!ModelState.IsValid) {
                 return BadRequest(client);
@@ -107,7 +107,7 @@ namespace MyCRM_API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<ClientEntity>> Edit([FromBody] ClientEditRequest client)
+        public async Task<ActionResult<ClientEntity>> Edit([FromBody] ClientEditDto client)
         {
             if (!ModelState.IsValid) {
                 return BadRequest(client);

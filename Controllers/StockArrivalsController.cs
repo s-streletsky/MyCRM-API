@@ -26,7 +26,7 @@ namespace MyCRM_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PageInfo<StockArrivalAllResponse>>> GetAll([FromQuery] int page)
+        public async Task<ActionResult<PageInfo<AllStockArrivalsDto>>> GetAll([FromQuery] int page)
         {
             int pageSize = 5;
 
@@ -39,15 +39,15 @@ namespace MyCRM_API.Controllers
             }
 
             var entities = await source.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
-            var stockArrivals = mapper.Map<List<StockArrivalAllResponse>>(entities);
+            var stockArrivals = mapper.Map<List<AllStockArrivalsDto>>(entities);
 
-            var pageResponse = new PageInfo<StockArrivalAllResponse>(totalPages, page, stockArrivals);
+            var pageResponse = new PageInfo<AllStockArrivalsDto>(totalPages, page, stockArrivals);
 
             return Ok(pageResponse);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<StockArrivalResponse>> Get(int id)
+        public async Task<ActionResult<StockArrivalEditDto>> Get(int id)
         {
             var entity = await dataContext.StockArrivals.FindAsync(id);
 
@@ -55,14 +55,14 @@ namespace MyCRM_API.Controllers
                 return NotFound(new { id = id });
             }
 
-            var stockArrival = new StockArrivalResponse();
+            var stockArrival = new StockArrivalEditDto();
             mapper.Map(entity, stockArrival);
 
             return Ok(stockArrival);
         }
 
         [HttpPost]
-        public async Task<ActionResult<StockArrivalEntity>> Create([FromBody] StockArrivalRequest stockArrival)
+        public async Task<ActionResult<StockArrivalEntity>> Create([FromBody] StockArrivalCreateDto stockArrival)
         {
             if (!ModelState.IsValid) {
                 return BadRequest(stockArrival);
@@ -79,7 +79,7 @@ namespace MyCRM_API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<StockArrivalEntity>> Edit([FromBody] StockArrivalResponse stockArrival)
+        public async Task<ActionResult<StockArrivalEntity>> Edit([FromBody] StockArrivalEditDto stockArrival)
         {
             if (!ModelState.IsValid) {
                 return BadRequest(stockArrival);

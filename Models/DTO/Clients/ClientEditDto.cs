@@ -6,5 +6,8 @@ using System.Threading.Tasks;
 
 namespace MyCRM_API.Models.DTO.Clients
 {
-    public class ClientResponse : ClientEditRequest { }
+    public class ClientEditDto : ClientCreateDto
+    {
+        public int Id { get; set; }
+    }
 }

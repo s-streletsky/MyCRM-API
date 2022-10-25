@@ -26,7 +26,7 @@ namespace MyCRM_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PageInfo<ExchangeRateAllResponse>>> GetAll([FromQuery] int page)
+        public async Task<ActionResult<PageInfo<AllExchangeRatesDto>>> GetAll([FromQuery] int page)
         {
             int pageSize = 5;
 
@@ -39,15 +39,15 @@ namespace MyCRM_API.Controllers
             }
 
             var entities = await source.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
-            var exchangeRates = mapper.Map<List<ExchangeRateAllResponse>>(entities);
+            var exchangeRates = mapper.Map<List<AllExchangeRatesDto>>(entities);
 
-            var pageResponse = new PageInfo<ExchangeRateAllResponse>(totalPages, page, exchangeRates);
+            var pageResponse = new PageInfo<AllExchangeRatesDto>(totalPages, page, exchangeRates);
 
             return Ok(pageResponse);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ExchangeRateResponse>> Get(int id)
+        public async Task<ActionResult<ExchangeRateEditDto>> Get(int id)
         {
             var entity = await dataContext.ExchangeRates.FindAsync(id);
 
@@ -55,7 +55,7 @@ namespace MyCRM_API.Controllers
                 return NotFound(new { id = id });
             }
 
-            var exchangeRate = new ExchangeRateResponse();
+            var exchangeRate = new ExchangeRateEditDto();
             mapper.Map(entity, exchangeRate);
 
             return Ok(exchangeRate);
@@ -73,7 +73,7 @@ namespace MyCRM_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ExchangeRateEntity>> Create([FromBody] ExchangeRateRequest exchangeRate)
+        public async Task<ActionResult<ExchangeRateEntity>> Create([FromBody] ExchangeRateCreateDto exchangeRate)
         {
             if (!ModelState.IsValid) {
                 return BadRequest(exchangeRate);
@@ -90,7 +90,7 @@ namespace MyCRM_API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<ExchangeRateEntity>> Edit([FromBody] ExchangeRateEditRequest exchangeRate)
+        public async Task<ActionResult<ExchangeRateEntity>> Edit([FromBody] ExchangeRateEditDto exchangeRate)
         {
             if (!ModelState.IsValid) {
                 return BadRequest(exchangeRate);

@@ -22,7 +22,7 @@ namespace MyCRM_API.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<ActionResult<IEnumerable<ClientAllResponse>>> GetAllList()
+        public async Task<ActionResult<IEnumerable<AllClientsDto>>> GetAllList()
         {
             var entities = await dataContext.OrderStatuses.ToListAsync();
 

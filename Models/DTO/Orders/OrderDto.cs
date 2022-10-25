@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyCRM_API.Models.DTO.ExchangeRates
+namespace MyCRM_API.Models.DTO.Orders
 {
-    public class ExchangeRateAllResponse
+    public class OrderDto
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
-        public CurrencyEntity Currency { get; set; }
-        public double Value { get; set; }
+        public ClientEntity Client { get; set; }
+        public OrderStatusEntity Status { get; set; }
+        public string Notes { get; set; }
     }
 }

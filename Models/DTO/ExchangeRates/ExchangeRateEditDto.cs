@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyCRM_API.Models.DTO.Clients
+namespace MyCRM_API.Models.DTO.ExchangeRates
 {
-    public class ClientEditRequest : ClientRequest
+    public class ExchangeRateEditDto : ExchangeRateCreateDto
     {
         public int Id { get; set; }
     }

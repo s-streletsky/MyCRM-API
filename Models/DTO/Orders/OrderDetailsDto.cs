@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyCRM_API.Models.DTO.Orders
 {
-    public class OrderFullResponse : OrderEntity
+    public class OrderDetailsDto : OrderEntity
     {
         public IEnumerable<OrderItemEntity> Items { get; set; }
         public float Total { get; set; }

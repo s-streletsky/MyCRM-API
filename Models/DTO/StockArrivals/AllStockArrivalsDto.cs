@@ -5,14 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyCRM_API.Models.DTO.Orders
+namespace MyCRM_API.Models.DTO.StockArrivals
 {
-    public class OrderResponse
+    public class AllStockArrivalsDto
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
-        public ClientEntity Client { get; set; }
-        public OrderStatusEntity Status { get; set; }
-        public string Notes { get; set; }
+        public StockItemEntity StockItem { get; set; }
+        public float Quantity { get; set; }
     }
 }

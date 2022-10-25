@@ -24,7 +24,7 @@ namespace MyCRM_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PageInfo<ManufacturerResponse>>> GetAll([FromQuery] int page)
+        public async Task<ActionResult<PageInfo<ManufacturerEditDto>>> GetAll([FromQuery] int page)
         {
             int pageSize = 5;
 
@@ -37,24 +37,24 @@ namespace MyCRM_API.Controllers
             }
 
             var entities = await source.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
-            var manufacturers = mapper.Map<List<ManufacturerResponse>>(entities);
+            var manufacturers = mapper.Map<List<ManufacturerEditDto>>(entities);
 
-            var pageResponse = new PageInfo<ManufacturerResponse>(totalPages, page, manufacturers);
+            var pageResponse = new PageInfo<ManufacturerEditDto>(totalPages, page, manufacturers);
 
             return Ok(pageResponse);
         }
 
         [HttpGet("list")]
-        public async Task<ActionResult<IEnumerable<ManufacturerResponse>>> GetAllList()
+        public async Task<ActionResult<IEnumerable<ManufacturerEditDto>>> GetAllList()
         {
             var entities = await dataContext.Manufacturers.ToListAsync();
-            var manufacturers = mapper.Map<IEnumerable<ManufacturerResponse>>(entities);
+            var manufacturers = mapper.Map<IEnumerable<ManufacturerEditDto>>(entities);
 
             return Ok(manufacturers);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ManufacturerResponse>> Get(int id)
+        public async Task<ActionResult<ManufacturerEditDto>> Get(int id)
         {
             var entity = await dataContext.Manufacturers.FindAsync(id);
 
@@ -62,14 +62,14 @@ namespace MyCRM_API.Controllers
                 return NotFound(new { id = id });
             }
 
-            var manufacturer = new ManufacturerResponse();
+            var manufacturer = new ManufacturerEditDto();
             mapper.Map(entity, manufacturer);
 
             return Ok(manufacturer);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ManufacturerEntity>> Create([FromBody] ManufacturerRequest manufacturer)
+        public async Task<ActionResult<ManufacturerEntity>> Create([FromBody] ManufacturerCreateDto manufacturer)
         {
             if (!ModelState.IsValid) {
                 return BadRequest(manufacturer);
@@ -85,7 +85,7 @@ namespace MyCRM_API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<ManufacturerEntity>> Edit([FromBody] ManufacturerResponse manufacturer)
+        public async Task<ActionResult<ManufacturerEntity>> Edit([FromBody] ManufacturerEditDto manufacturer)
         {
             if (!ModelState.IsValid) {
                 return BadRequest(manufacturer);

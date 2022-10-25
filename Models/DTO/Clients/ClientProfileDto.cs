@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyCRM_API.Models.DTO.Clients
 {
-    public class ClientProfileResponse : ClientAllResponse
+    public class ClientProfileDto : AllClientsDto
     {
         public string? Address { get; set; }
         public string? Notes { get; set; }

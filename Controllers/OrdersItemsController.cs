@@ -27,7 +27,7 @@ namespace MyCRM_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PageInfo<OrderItemAllResponse>>> GetAll([FromQuery] int page)
+        public async Task<ActionResult<PageInfo<AllOrderItemsDto>>> GetAll([FromQuery] int page)
         {
             int pageSize = 5;
 
@@ -40,15 +40,15 @@ namespace MyCRM_API.Controllers
             }
 
             var entities = await source.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
-            var ordersItems = mapper.Map<List<OrderItemAllResponse>>(entities);
+            var ordersItems = mapper.Map<List<AllOrderItemsDto>>(entities);
 
-            var pageResponse = new PageInfo<OrderItemAllResponse>(totalPages, page, ordersItems);
+            var pageResponse = new PageInfo<AllOrderItemsDto>(totalPages, page, ordersItems);
 
             return Ok(pageResponse);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<OrderItemResponse>> Get(int id)
+        public async Task<ActionResult<OrderItemEditDto>> Get(int id)
         {
             var entity = await dataContext.OrdersItems.FindAsync(id);
 
@@ -57,14 +57,14 @@ namespace MyCRM_API.Controllers
                 return NotFound(new { id = id });
             }
 
-            var orderItem = new OrderItemResponse();
+            var orderItem = new OrderItemEditDto();
             mapper.Map(entity, orderItem);
 
             return Ok(orderItem);
         }
 
         [HttpPost]
-        public async Task<ActionResult<OrderItemEntity>> Create([FromBody] OrderItemRequest orderItem)
+        public async Task<ActionResult<OrderItemEntity>> Create([FromBody] OrderItemCreateDto orderItem)
         {
             if (!ModelState.IsValid) {
                 return BadRequest(orderItem);
@@ -85,7 +85,7 @@ namespace MyCRM_API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<OrderItemEntity>> Edit([FromBody] OrderItemResponse orderItem)
+        public async Task<ActionResult<OrderItemEntity>> Edit([FromBody] OrderItemEditDto orderItem)
         {
             if (!ModelState.IsValid) {
                 return BadRequest(orderItem);

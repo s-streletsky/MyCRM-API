@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyCRM_API.Models.DTO.OrdersItems
 {
-    public class OrderItemAllResponse
+    public class AllOrderItemsDto
     {
         public int Id { get; set; }
         public StockItemEntity StockItem { get; set; }

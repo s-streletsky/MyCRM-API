@@ -25,7 +25,7 @@ namespace MyCRM_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PageInfo<StockItemAllResponse>>> GetAll([FromQuery] int page)
+        public async Task<ActionResult<PageInfo<AllStockItemsDto>>> GetAll([FromQuery] int page)
         {
             int pageSize = 5;
 
@@ -37,15 +37,15 @@ namespace MyCRM_API.Controllers
             }
 
             var entities = await source.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
-            var stockItems = mapper.Map<List<StockItemAllResponse>>(entities);
+            var stockItems = mapper.Map<List<AllStockItemsDto>>(entities);
 
-            var pageResponse = new PageInfo<StockItemAllResponse>(totalPages, page, stockItems);
+            var pageResponse = new PageInfo<AllStockItemsDto>(totalPages, page, stockItems);
 
             return Ok(pageResponse);
         }
 
         [HttpGet("list")]
-        public async Task<ActionResult<IEnumerable<ManufacturerResponse>>> GetAllList()
+        public async Task<ActionResult<IEnumerable<ManufacturerEditDto>>> GetAllList()
         {
             var entities = await dataContext.StockItems.ToListAsync();
 
@@ -53,7 +53,7 @@ namespace MyCRM_API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<StockItemResponse>> Get(int id)
+        public async Task<ActionResult<StockItemEditDto>> Get(int id)
         {
             var entity = await dataContext.StockItems.FindAsync(id);
 
@@ -61,14 +61,14 @@ namespace MyCRM_API.Controllers
                 return NotFound(new { id = id });
             }
 
-            var stockItem = new StockItemResponse();
+            var stockItem = new StockItemEditDto();
             mapper.Map(entity, stockItem);
 
             return Ok(stockItem);
         }
 
         [HttpPost]
-        public async Task<ActionResult<StockItemEntity>> Create([FromBody] StockItemRequest stockItem)
+        public async Task<ActionResult<StockItemEntity>> Create([FromBody] StockItemCreateDto stockItem)
         {
             if (!ModelState.IsValid) {
                 return BadRequest(stockItem);
@@ -84,7 +84,7 @@ namespace MyCRM_API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<StockItemResponse>> Edit([FromBody] StockItemResponse stockItem)
+        public async Task<ActionResult<StockItemEditDto>> Edit([FromBody] StockItemEditDto stockItem)
         {
             if (!ModelState.IsValid) {
                 return BadRequest(stockItem);

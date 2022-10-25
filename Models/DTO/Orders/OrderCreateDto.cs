@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyCRM_API.Models.DTO.ExchangeRates
+namespace MyCRM_API.Models.DTO.Orders
 {
-    public class ExchangeRateRequest
+    public class OrderCreateDto
     {
-        public int CurrencyId { get; set; }
-        public float Value { get; set; }
+        public int ClientId { get; set; }
+        public string? Notes { get; set; }
     }
 }

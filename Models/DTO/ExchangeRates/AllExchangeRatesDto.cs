@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyCRM_API.Models.DTO.StockArrivals
+namespace MyCRM_API.Models.DTO.ExchangeRates
 {
-    public class StockArrivalAllResponse
+    public class AllExchangeRatesDto
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
-        public StockItemEntity StockItem { get; set; }
-        public float Quantity { get; set; }
+        public CurrencyEntity Currency { get; set; }
+        public double Value { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyCRM_API.Models.DTO.Clients
 {
-    public class ClientRequest
+    public class ClientCreateDto
     {
         public string Name { get; set; }
         public string? Nickname { get; set; }

@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyCRM_API.Models.DTO.Orders
+namespace MyCRM_API.Models.DTO.Manufacturers
 {
-    public class OrderEditRequest : OrderRequest
+    public class ManufacturerEditDto : ManufacturerCreateDto
     {
         public int Id { get; set; }
-        public int StatusId { get; set; }
     }
 }

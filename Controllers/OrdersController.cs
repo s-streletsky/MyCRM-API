@@ -26,7 +26,7 @@ namespace MyCRM_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PageInfo<OrderResponse>>> GetAll([FromQuery] int page)
+        public async Task<ActionResult<PageInfo<OrderDto>>> GetAll([FromQuery] int page)
         {
             int pageSize = 5;
 
@@ -39,15 +39,15 @@ namespace MyCRM_API.Controllers
             }
 
             var entities = await source.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
-            var orders = mapper.Map<List<OrderResponse>>(entities);
+            var orders = mapper.Map<List<OrderDto>>(entities);
 
-            var pageResponse = new PageInfo<OrderResponse>(totalPages, page, orders);
+            var pageResponse = new PageInfo<OrderDto>(totalPages, page, orders);
 
             return Ok(pageResponse);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<OrderFullResponse>> Get(int id)
+        public async Task<ActionResult<OrderDetailsDto>> Get(int id)
         {
             var entity = await dataContext.Orders.FindAsync(id);
 
@@ -55,7 +55,7 @@ namespace MyCRM_API.Controllers
                 return NotFound(new { id = id });
             }
 
-            var order = new OrderFullResponse();
+            var order = new OrderDetailsDto();
             mapper.Map(entity, order);
 
             order.Items = await dataContext.OrdersItems.Where(i => i.OrderId == id).ToListAsync();
@@ -67,7 +67,7 @@ namespace MyCRM_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<OrderEntity>> Create([FromBody] OrderRequest order)
+        public async Task<ActionResult<OrderEntity>> Create([FromBody] OrderCreateDto order)
         {
             if (!ModelState.IsValid) {
                 return BadRequest(order);
@@ -85,7 +85,7 @@ namespace MyCRM_API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<OrderEntity>> Edit([FromBody] OrderEditRequest order)
+        public async Task<ActionResult<OrderEntity>> Edit([FromBody] OrderEditDto order)
         {
             if (!ModelState.IsValid) {
                 return BadRequest(order);
