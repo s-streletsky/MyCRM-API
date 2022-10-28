@@ -9,7 +9,7 @@ using MyCRM_API.Models.Entities;
 
 namespace MyCRM_API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ExchangeRatesController : ControllerBase
@@ -26,10 +26,8 @@ namespace MyCRM_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PageInfo<AllExchangeRatesDto>>> GetAll([FromQuery] int page)
+        public async Task<ActionResult<PageInfo<AllExchangeRatesDto>>> GetAll([FromQuery] int page, int pageSize)
         {
-            int pageSize = 5;
-
             IQueryable<ExchangeRateEntity> source = dataContext.ExchangeRates;
             var totalPages = PageInfo<Object>.PagesCount(source, pageSize);
 

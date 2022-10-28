@@ -10,7 +10,7 @@ using MyCRM_API.Processors;
 
 namespace MyCRM_API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class OrdersItemsController : ControllerBase
@@ -27,10 +27,8 @@ namespace MyCRM_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PageInfo<AllOrderItemsDto>>> GetAll([FromQuery] int page)
+        public async Task<ActionResult<PageInfo<AllOrderItemsDto>>> GetAll([FromQuery] int page, int pageSize)
         {
-            int pageSize = 5;
-
             IQueryable<OrderItemEntity> source = dataContext.OrdersItems;
             var totalPages = PageInfo<Object>.PagesCount(source, pageSize);
 

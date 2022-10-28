@@ -7,7 +7,7 @@ using MyCRM_API.Models.Entities;
 
 namespace MyCRM_API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CurrenciesController : ControllerBase

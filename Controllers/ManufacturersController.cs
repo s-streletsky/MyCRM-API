@@ -9,7 +9,7 @@ using MyCRM_API.Models.Entities;
 
 namespace MyCRM_API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ManufacturersController : ControllerBase
@@ -24,10 +24,8 @@ namespace MyCRM_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PageInfo<ManufacturerEditDto>>> GetAll([FromQuery] int page)
+        public async Task<ActionResult<PageInfo<ManufacturerEditDto>>> GetAll([FromQuery] int page, int pageSize)
         {
-            int pageSize = 5;
-
             IQueryable<ManufacturerEntity> source = dataContext.Manufacturers;
             var totalPages = PageInfo<Object>.PagesCount(source, pageSize);
 
